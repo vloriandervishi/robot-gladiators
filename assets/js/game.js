@@ -12,7 +12,8 @@ var enemyAttack = 10;
 
 
 var fight = function (enemyName) {
-
+    // generate random damage value based on player's attack power
+    var damage = randomNumber(playerAttack-3,playerAttack);
 
     var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'Skipt'");
     while (enemyHealth > 0 && playerHealth > 0) {
@@ -20,7 +21,8 @@ var fight = function (enemyName) {
             // remove enemhy's health by subtracting the amount set in the playerAttack variable
 
             //Subtract the value of `playerAttack` from the value of `enemyHealth` and use that result to update the value in the `enemyHealth` variable
-            enemyHealth = enemyHealth - playerAttack;
+            
+            enemyHealth = Math.max(0, enemyHealth - damage);
             // Log a resulting message to the console so we know that it worked.
             console.log(playerName + "attacked" + enemyName + "." + enemyName + "now has" + enemyHealth + "health remaining.");
             // Subtract the value of `enemyAttack` from the value of `playerHealth` and use that result to update the value in the `playerHealth` variable.
@@ -34,7 +36,7 @@ var fight = function (enemyName) {
             else {
                 window.alert(enemyName + "still has" + enemyHealth + "health left.");
             }
-            playerHealth = playerHealth - enemyAttack;
+            playerHealth = Math.max(0, playerHealth - damage);
             console.log(`${enemyName}attacked${playerName}.${playerName}now has${playerHealth}health remaining.`);
             if (playerHealth <= 0) {
                 window.alert(playerName + "has died!");
@@ -52,7 +54,10 @@ var fight = function (enemyName) {
 
                 window.alert(playerName + "has decided to skip this fight. GoodBye!");
                 // subtract money from player money for skipping
-                playerMoney = playerMoney - 10;
+                playerMoney = Math.max(playerMoney - 10);
+                if (playerMoney < 0) {
+                    playerMoney = 0;
+                }
                 console.log("playerMoney", playerMoney);
                 break;
             }
@@ -70,11 +75,18 @@ var fight = function (enemyName) {
 
 };
 
+var randomNumber = function (min,max) {
+    var value = Math.floor(Math.random() * (max-min +1)+min);
+    return value;
+}
 var startgame = function () {
+    // global variable enemyName stored in startgame function as enemyNames
     var enemyNames = enemyName;
     playerHealth = 100;
     playerAttack = 10;
     playerMoney = 10;
+    // function to generate a random numeric value
+    enemyHealth = randomNumber(40,60);
 
 
     for (var i = 0; i < enemyNames.length; i++) {
@@ -84,7 +96,7 @@ var startgame = function () {
             // pick new enemy to fight based on the index of the enemyNames array
             var pickedEnemyName = enemyNames[i];
             // reset enemyHealth before starting new fight
-            enemyHealth = 50;
+            enemyHealth = Math.floor(Math.random() * 60);
             // use debugger to pause script from running and check what's going on at that moment in the code
             // debugger;
             // pass the pickedEnemyName variable's value into the fight function, where it will assume the value of the enemyName parameter
@@ -102,7 +114,7 @@ var startgame = function () {
             window.alert("You have lost your robot in battle! Game Over");
             break;
         }
-        
+
     }
 
 
